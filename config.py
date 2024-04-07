@@ -1,12 +1,21 @@
 # config.py (for configuring the daily digest bot)
+from environs import Env
 
-CLIENT_ID = 'your_client_id'
-CLIENT_SECRET = 'your_client_secret'
-USER_AGENT = 'your_user_agent'
-REDDIT_USERNAME = 'your_reddit_username'
-REDDIT_PASSWORD = 'your_reddit_password'
+env = Env()
+env.read_env()  # read .env file, if it exists
 
-SUBREDDITS = ['subreddit1', 'subreddit2'] # Subreddits to fetch from, don't include r/ before the subreddit name. Example: ['science', 'technology', 'maths', 'physics']
-TARGET_SUBREDDIT = 'your_target_subreddit_name' # Name of the subreddit to the bot will post the digested content to
-TIME_RANGE = 'day' # 'day', 'week', 'month', 'year', 'all'
+CLIENT_ID = env("REDDIT_CLIENT_ID")
+CLIENT_SECRET = env("REDDIT_CLIENT_SECRET")
+USER_AGENT = env("REDDIT_USER_AGENT")
+REDDIT_USERNAME = env("REDDIT_USERNAME")
+REDDIT_PASSWORD = env("REDDIT_PASSWORD")
+MAILJET_API_KEY = env("MAILJET_API_KEY")
+MAILJET_SECRET_KEY = env("MAILJET_SECRET_KEY")
+TO_EMAIL = env("TO_EMAIL")
+FROM_EMAIL = env("FROM_EMAIL")
+TEST = env.bool("TEST", False)
+
+SUBREDDITS = env.list("SUBREDDITS")
+# Subreddits to fetch from, don't include r/ before the subreddit name. Example: ['science', 'technology', 'maths', 'physics']
+TIME_RANGE = env("TIME_RANGE", "day")  # 'day', 'week', 'month', 'year', 'all'
 # TIME_RANGE only works for the top.py, controversial.py script.
