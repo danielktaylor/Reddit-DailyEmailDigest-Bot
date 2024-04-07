@@ -2,6 +2,8 @@
 
 This project was forked off in order to send emails instead of posting to a subreddit.
 
+This was created in order to eliminate the need for [IFTTT Reddit Digest](https://ifttt.com/applets/biJKbfTg-reddit-weekly-digest?term=reddit+digest)
+
 **Reddit Daily Email Digest Bot** is a Python bot designed to simplify the process of aggregating and sharing top posts from your favorite subreddits. It fetches the top posts from specified subreddits, compiles them into a neatly formatted daily digest, and automatically emails the digest to an email
 
 ## Key Features
