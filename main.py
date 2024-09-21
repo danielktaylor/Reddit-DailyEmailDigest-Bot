@@ -1,5 +1,6 @@
 import praw
-from datetime import datetime
+import time
+import datetime
 from urllib.parse import urlparse
 from mailjet_rest import Client
 import mimetypes
@@ -54,11 +55,11 @@ def compile_digest(reddit, test=False):
                     text = f'<img src="{url}" width="500" height="600">'
                 else:
                     text = f'<a href="{url}">{url}</a>'
-            date_str = datetime.fromtimestamp(submission.created_utc)
+            date_str = datetime.datetime.fromtimestamp(submission.created_utc)
             link = f'<a href="https://www.reddit.com{submission.permalink}">{submission.title}</a>'
             new_content = f"<h2>{i}. {link}</h2><p>{text}</p><p>{submission.score} upvotes; {submission.num_comments} comments; By: by u/{submission.author} on {date_str}<br />{link}</p><br /><hr><br />"
             compiled_content += new_content
-        subject = f"{subreddit.title()} {i} Top Posts for {datetime.today().strftime('%Y-%m-%d')}"
+        subject = f"{subreddit.title()} {i} Top Posts for {datetime.datetime.today().strftime('%Y-%m-%d')}"
         print(subject)
         if not test:
             send_email(subject=subject, html=compiled_content)
@@ -69,12 +70,27 @@ def compile_digest(reddit, test=False):
             print("\n")
 
 
+def time_until_end_of_day(dt=None):
+    # type: (datetime.datetime) -> datetime.timedelta
+    """
+    Get timedelta until end of day on the datetime passed, or current time.
+    """
+    if dt is None:
+        dt = datetime.datetime.now()
+    tomorrow = dt + datetime.timedelta(days=1)
+    return datetime.datetime.combine(tomorrow, datetime.time.min) - dt
+
+
 if __name__ == "__main__":
-    reddit = praw.Reddit(
-        client_id=CLIENT_ID,
-        client_secret=CLIENT_SECRET,
-        user_agent=USER_AGENT,
-        username=REDDIT_USERNAME,
-        password=REDDIT_PASSWORD,
-    )
-    compile_digest(reddit, test=TEST)
+    while True:
+        print("Sleeping...")
+        time.sleep(time_until_end_of_day().seconds) # sleep until end of the day
+        print("Waking...")
+        reddit = praw.Reddit(
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SECRET,
+            user_agent=USER_AGENT,
+            username=REDDIT_USERNAME,
+            password=REDDIT_PASSWORD,
+        )
+        compile_digest(reddit, test=TEST)
