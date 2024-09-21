@@ -27,5 +27,5 @@ Set the `SUBREDDITS` variable to the subreddit from which you want to fetch post
 
 ```bash
 docker build --tag reddit-digest .
-docker run --name=reddit-digest --env-file .env --restart=unless-stopped reddit-digest
+docker run -d --name=reddit-digest --env-file .env --restart=unless-stopped reddit-digest
 ```
