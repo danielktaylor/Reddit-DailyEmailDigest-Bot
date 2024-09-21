@@ -11,24 +11,21 @@ This project is a fork of [Reddit-DailyEmailDigest-Bot](https://github.com/Ventu
 - Compile the fetched posts into a digest with post details.
 - Email the digest to a designated email using mailjet.
 
-## Configuration 
-### API Credentials
+## Setup
+
+### Get API Credentials
 
 * Get a free Reddit API key ([instructions](https://www.jcchouinard.com/reddit-api/))
 * Set up a free Mailjet account, and generate an API key
 
+### Configuration
+Copy `.env.example` to `.env` and fill out the values
 
-### Subreddits 
-Pass in the `SUBREDDITS` variable to specify the subreddits from which you want to fetch posts. Don't include r/ before the name of the subreddit.
-
-```python
-SUBREDDITS = ['science', 'technology', 'maths', 'physics']
-```
+Set the `SUBREDDITS` variable to the subreddit from which you want to fetch posts. Don't include r/ before the name of the subreddit.
 
 ## Running
 
 ```bash
 docker build --tag reddit-digest .
-docker create --name=reddit-digest --restart=unless-stopped reddit-digest
-docker start reddit-digest 
+docker run --name=reddit-digest --env-file .env --restart=unless-stopped reddit-digest
 ```

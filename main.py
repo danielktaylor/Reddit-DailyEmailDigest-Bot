@@ -38,7 +38,6 @@ def send_email(subject, html):
 
 
 def compile_digest(reddit, test=False):
-    print(f"THIS IS A TEST: {test}")
     for subreddit in SUBREDDITS:
         compiled_content = ""
         submissions = reddit.subreddit(subreddit).top(time_filter=TIME_RANGE)
@@ -61,6 +60,7 @@ def compile_digest(reddit, test=False):
         if not test:
             send_email(subject=subject, html=compiled_content)
         else:
+            print(f"THIS IS A TEST: {test}")
             print(compiled_content)
             print("=" * 80)
             print("\n")
