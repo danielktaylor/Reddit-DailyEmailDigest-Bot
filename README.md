@@ -12,15 +12,14 @@ This project is a fork of [Reddit-DailyEmailDigest-Bot](https://github.com/Ventu
 - Email the digest to a designated email using mailjet.
 
 ## Configuration 
-### Reddit API Credentials
+### API Credentials
 
-Rename the `.env.example` file to `.env` and add your Reddit and Mailjet API credentials. 
- - See [PRAW setup instructions](https://praw.readthedocs.io/en/stable/getting_started/quick_start.html#)
- - See [Mailjet setup instructions](https://github.com/mailjet/mailjet-apiv3-python?tab=readme-ov-file#installation)
+* Get a free Reddit API key ([instructions](https://www.jcchouinard.com/reddit-api/))
+* Set up a free Mailjet account, and generate an API key
 
 
 ### Subreddits 
-Modify the `SUBREDDITS` variable in `config.py` to specify the subreddits from which you want to fetch posts. Don't include r/ before the name of the subreddit.
+Pass in the `SUBREDDITS` variable to specify the subreddits from which you want to fetch posts. Don't include r/ before the name of the subreddit.
 
 ```python
 SUBREDDITS = ['science', 'technology', 'maths', 'physics']
