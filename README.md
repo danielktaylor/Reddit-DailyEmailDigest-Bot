@@ -25,3 +25,11 @@ Modify the `SUBREDDITS` variable in `config.py` to specify the subreddits from w
 ```python
 SUBREDDITS = ['science', 'technology', 'maths', 'physics']
 ```
+
+## Running
+
+```bash
+docker build --tag reddit-digest .
+docker create --name=reddit-digest --restart=unless-stopped reddit-digest
+docker start reddit-digest 
+```
