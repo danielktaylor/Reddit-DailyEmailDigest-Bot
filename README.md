@@ -1,4 +1,4 @@
-# Reddit Daily Email Digest Bot
+# Subreddit Daily Email Digest
 
 This project is a fork of [Reddit-DailyEmailDigest-Bot](https://github.com/VenturaFranklin/Reddit-DailyEmailDigest-Bot) in order to Dockerize it. That repo is itself a fork of [Reddit-DailyDigest-Bot](https://github.com/ni5arga/Reddit-DailyDigest-Bot)
 
