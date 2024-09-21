@@ -42,6 +42,9 @@ def compile_digest(reddit, test=False):
         compiled_content = ""
         submissions = reddit.subreddit(subreddit).top(time_filter=TIME_RANGE)
         for i, submission in enumerate(submissions, start=1):
+            if i > 9:
+                break
+
             if submission.is_self:
                 text = submission.selftext.replace("\n", "<br />")
             else:
