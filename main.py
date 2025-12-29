@@ -1,6 +1,7 @@
 import praw
 import time
-import datetime
+from datetime import datetime, time as dtime, timedelta
+from zoneinfo import ZoneInfo
 from urllib.parse import urlparse
 from mailjet_rest import Client
 import mimetypes
@@ -19,6 +20,8 @@ from config import (
     TEST,
 )
 
+SEATTLE_TZ = ZoneInfo("America/Los_Angeles")
+RUN_TIME = dtime(hour=23, minute=0)  # 11:00 PM
 
 def send_email(subject, html):
     # import the mailjet wrapper
@@ -36,7 +39,6 @@ def send_email(subject, html):
     result = mailjet.send.create(data=data)
     print(result.status_code)
     print(result.json())
-
 
 def compile_digest(reddit, test=False):
     for subreddit in SUBREDDITS:
@@ -56,12 +58,12 @@ def compile_digest(reddit, test=False):
                     text = f'<img src="{url}" width="500" height="600">'
                 else:
                     text = f'<a href="{url}">{url}</a>'
-            date_str = datetime.datetime.fromtimestamp(submission.created_utc)
+            date_str = datetime.fromtimestamp(submission.created_utc)
             link = f'<a href="https://www.reddit.com{submission.permalink}">{submission.title}</a>'
             new_content = f"<h2>{i}. {link}</h2><p>{text}</p><p>{submission.score} upvotes; {submission.num_comments} comments; By: by u/{submission.author} on {date_str}<br />{link}</p><br /><hr><br />"
             compiled_content += new_content
         if i:
-            subject = f"{subreddit.title()} {i} Top Posts for {datetime.datetime.today().strftime('%Y-%m-%d')}"
+            subject = f"{subreddit.title()} {i} Top Posts for {datetime.today().strftime('%Y-%m-%d')}"
             print(subject)
             if not test:
                 send_email(subject=subject, html=compiled_content)
@@ -71,22 +73,19 @@ def compile_digest(reddit, test=False):
                 print("=" * 80)
                 print("\n")
 
-
-def time_until_end_of_day(dt=None):
-    # type: (datetime.datetime) -> datetime.timedelta
-    """
-    Get timedelta until end of day on the datetime passed, or current time.
-    """
-    if dt is None:
-        dt = datetime.datetime.now()
-    tomorrow = dt + datetime.timedelta(days=1)
-    return datetime.datetime.combine(tomorrow, datetime.time.min) - dt
-
+def seconds_until_next_run(now=None):
+    if now is None:
+        now = datetime.now(SEATTLE_TZ)
+    next_run = datetime.combine(now.date(), RUN_TIME, tzinfo=SEATTLE_TZ)
+    if now >= next_run:
+        next_run += timedelta(days=1)
+    return (next_run - now).total_seconds()
 
 if __name__ == "__main__":
     while True:
         print("Sleeping...")
-        time.sleep(time_until_end_of_day().seconds) # sleep until end of the day
+        sleep_seconds = seconds_until_next_run()
+        time.sleep(sleep_seconds)
         print("Waking...")
         reddit = praw.Reddit(
             client_id=CLIENT_ID,
